@@ -5,7 +5,8 @@ const filePath = path.join(process.cwd(), 'data', 'items.json');
 
 export default function handler(req, res) {
   if (req.method === 'POST') {
-    // Read the existing items from the file
+    console.log('Incoming request body:', req.body);  // Log incoming item data
+
     fs.readFile(filePath, (err, data) => {
       if (err) {
         return res.status(500).json({ error: 'Error reading the items file' });
@@ -13,6 +14,8 @@ export default function handler(req, res) {
 
       const items = JSON.parse(data);
       const newItem = req.body;
+
+      console.log('Current items:', items);  // Log current items in the file
 
       // Add the new item to the items array
       items.push(newItem);
@@ -22,7 +25,8 @@ export default function handler(req, res) {
         if (err) {
           return res.status(500).json({ error: 'Error saving the item' });
         }
-        res.status(200).json({ message: 'Item saved successfully' });
+        console.log('Updated items:', items);  // Log the updated list of items
+        res.status(200).json({ message: 'Item saved successfully', item: newItem });
       });
     });
   } else {
