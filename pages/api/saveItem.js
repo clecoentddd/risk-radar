@@ -1,34 +1,28 @@
-import fs from 'fs';
-import path from 'path';
+import { MongoClient } from 'mongodb';
 
-const filePath = path.join(process.cwd(), 'data', 'items.json');
+const uri = process.env.MONGODB_URI;  // Get connection string from environment variables
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method === 'POST') {
-    console.log('Incoming request body:', req.body);  // Log incoming item data
+    try {
+      // Connect to MongoDB
+      await client.connect();
 
-    fs.readFile(filePath, (err, data) => {
-      if (err) {
-        return res.status(500).json({ error: 'Error reading the items file' });
-      }
+      const database = client.db('radar'); // Use the 'radar' database (or whatever you chose)
+      const collection = database.collection('items'); // 'items' is the collection where items will be saved
 
-      const items = JSON.parse(data);
+      // Insert the new item into the collection
       const newItem = req.body;
+      const result = await collection.insertOne(newItem);
 
-      console.log('Current items:', items);  // Log current items in the file
-
-      // Add the new item to the items array
-      items.push(newItem);
-
-      // Write the updated items back to the file
-      fs.writeFile(filePath, JSON.stringify(items, null, 2), (err) => {
-        if (err) {
-          return res.status(500).json({ error: 'Error saving the item' });
-        }
-        console.log('Updated items:', items);  // Log the updated list of items
-        res.status(200).json({ message: 'Item saved successfully', item: newItem });
-      });
-    });
+      res.status(200).json({ message: 'Item saved successfully', item: newItem });
+    } catch (error) {
+      console.error('Error saving item:', error);
+      res.status(500).json({ error: 'Error saving the item' });
+    } finally {
+      await client.close();  // Always close the connection after use
+    }
   } else {
     res.status(405).json({ error: 'Method Not Allowed' });
   }
