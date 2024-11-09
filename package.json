@@ -9,7 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "mongodb": "^7.0",  // MongoDB client library
+    "mongodb": "^7.0",
     "next": "^13.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
