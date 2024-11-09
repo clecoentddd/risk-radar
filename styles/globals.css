@@ -1,0 +1,16 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+input, select {
+  margin: 5px;
+  padding: 8px;
+}
+
+canvas {
+  border: 2px solid black;
+  margin-top: 20px;
+}
