@@ -20,18 +20,22 @@ const IndexPage = () => {
   }, []);
 
   const addItem = async () => {
-    const response = await fetch('/api/saveItem', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newItem),
-    });
-    
-    if (response.ok) {
-      setItems([...items, newItem]); // Add the new item to the radar immediately
-    } else {
-      console.error('Error saving item');
-    }
-  };
+  console.log('Adding item:', newItem);  // Log the new item to be added
+
+  const response = await fetch('/api/saveItem', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newItem),
+  });
+
+  if (response.ok) {
+    const addedItem = await response.json();
+    console.log('Item saved:', addedItem);
+    setItems([...items, newItem]);
+  } else {
+    console.error('Error saving item');
+  }
+};
 
   // Function to draw items on the radar canvas
   const drawRadar = () => {
