@@ -10,7 +10,7 @@ export default async function handler(req, res) {
       await client.connect();
 
       const database = client.db('radar'); // Use the 'radar' database (or whatever you chose)
-      const collection = database.collection('items'); // 'items' is the collection where items will be saved
+      const collection = database.collection('enterprise'); // 'items' is the collection where items will be saved
 
       // Insert the new item into the collection
       const newItem = req.body;
