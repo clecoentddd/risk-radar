@@ -1,3 +1,6 @@
+"scripts": {
+  "dev": "next dev"
+}
 {
   "name": "risk-radar",
   "version": "1.0.0",
